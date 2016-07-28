@@ -7,8 +7,8 @@ $(PKG)_VERSION  := 5.7.0
 $(PKG)_CHECKSUM := 3e7b6d123cab23a587ccbc45173296b33786faa409dba0494e4658fda3ede646
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \
@@ -36,8 +36,8 @@ define $(PKG)_BUILD
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
-            -no-icu \
-            -opengl desktop \
+            -icu \
+            -opengl dynamic \
             -no-glib \
             -accessibility \
             -nomake examples \
@@ -55,9 +55,8 @@ define $(PKG)_BUILD
             -fontconfig \
             -system-freetype \
             -system-harfbuzz \
-            -system-pcre \
-            -openssl-linked \
-            -dbus-linked \
+            -qt-pcre \
+            -openssl \
             -v \
             $($(PKG)_CONFIGURE_OPTS)
 
