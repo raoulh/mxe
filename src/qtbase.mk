@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 3e7b6d123cab23a587ccbc45173296b33786faa409dba0494e4658fda3ede
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
+$(PKG)_DEPS     := gcc fontconfig freetds libmysqlclient openssl postgresql sqlite dbus
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \
@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
-        SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
+        SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -lws2_32" \
         ./configure \
             -opensource \
             -c++std c++11 \
@@ -39,6 +39,7 @@ define $(PKG)_BUILD
             -icu \
             -opengl dynamic \
             -no-glib \
+            -no-iconv \
             -accessibility \
             -nomake examples \
             -nomake tests \
@@ -48,14 +49,15 @@ define $(PKG)_BUILD
             -plugin-sql-odbc \
             -plugin-sql-psql \
             -plugin-sql-tds -D Q_USE_SYBASE \
-            -system-zlib \
-            -system-libpng \
-            -system-libjpeg \
+            -qt-zlib \
+            -qt-libpng \
+            -qt-libjpeg \
             -system-sqlite \
-            -fontconfig \
-            -system-freetype \
-            -system-harfbuzz \
+            -no-fontconfig \
+            -qt-freetype \
+            -qt-harfbuzz \
             -qt-pcre \
+            -dbus-runtime \
             -openssl \
             -v \
             $($(PKG)_CONFIGURE_OPTS)
