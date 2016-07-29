@@ -18,14 +18,7 @@ target_link_libraries(
     ${Qt5Gui_LIBRARIES}
     ${Qt5Core_LIBRARIES}
     opengl32
-    harfbuzz
-    jpeg
-    png
-    glib-2.0
     winmm
     ws2_32
     intl
-    iconv
-    pcre16
-    z
 )
