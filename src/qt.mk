@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qt
 $(PKG)_IGNORE   :=
@@ -22,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
+        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
         CXXFLAGS="-std=gnu++98" \
         ./configure \
@@ -66,7 +65,8 @@ define $(PKG)_BUILD
         -system-sqlite \
         -openssl-linked \
         -dbus-linked \
-        -v
+        -v \
+        $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
@@ -103,7 +103,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/$(2).pro'
+    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/src/$(PKG)-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 

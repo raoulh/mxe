@@ -957,6 +957,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <a href="#issue-non-multilib">known issues</a>
         </dd>
 
+    <dt>make foo_SOURCE_TREE=/path/to/local/source</dt>
+
+        <dd>
+        build using local source tree for package "foo", bypassing
+        download, checksum and patching
+        </dd>
+        <dd>
+        <strong>N.B.</strong> ensure "foo" has an out-of-source
+        build configured to avoid generation of build artefacts
+        in local tree
+        </dd>
+
     <dt>make check-requirements</dt>
 
         <dd>
@@ -1038,11 +1050,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         suitable for usage in shell scripts
         </dd>
 
-    <dt>make build-matrix.html</dt>
+    <dt>make docs/build-matrix.html</dt>
 
         <dd>
         generate a report of what packages are
-        supported on what targets to build-matrix.html
+        supported on what targets to
+        <a href="build-matrix.html">docs/build-matrix.html</a>
         </dd>
 
     <dt>make update</dt>
@@ -1531,11 +1544,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">hdf4</td>
-        <td class="website"><a href="http://www.hdfgroup.org/products/hdf4/">HDF4</a></td>
+        <td class="website"><a href="https://www.hdfgroup.org/hdf4/">HDF4</a></td>
     </tr>
     <tr>
         <td class="package">hdf5</td>
-        <td class="website"><a href="http://www.hdfgroup.org/products/hdf5/">HDF5</a></td>
+        <td class="website"><a href="https://www.hdfgroup.org/hdf5/">HDF5</a></td>
     </tr>
     <tr>
         <td class="package">hunspell</td>
@@ -2486,6 +2499,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D</a></td>
     </tr>
     <tr>
+        <td class="package">ragel</td>
+        <td class="website"><a href="https://www.colm.net/open-source/ragel/">Ragel</a></td>
+    </tr>
+    <tr>
         <td class="package">readline</td>
         <td class="website"><a href="http://tiswww.case.edu/php/chet/readline/rltop.html">Readline</a></td>
     </tr>
@@ -2930,7 +2947,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </p>
 
         <p>
-        The <a href="doc/gmsl.html">GNU Make Standard Library</a> is also
+        The <a href="gmsl.html">GNU Make Standard Library</a> is also
         available (though it should be unnecessary for most packages).
         </p>
 
@@ -3036,8 +3053,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         and should start with:
         </p>
-        <pre>This file is part of MXE.
-See index.html for further information.
+        <pre>This file is part of MXE. See LICENSE.md for licensing information.
 
 This patch has been taken from:
 https://...</pre>
