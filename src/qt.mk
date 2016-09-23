@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
+$(PKG)_DEPS     := gcc dbus freetds openssl postgresql sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \
@@ -58,13 +58,13 @@ define $(PKG)_BUILD
         -no-sql-mysql \
         -qt-sql-tds -D Q_USE_SYBASE \
         -system-zlib \
-        -system-libpng \
-        -system-libjpeg \
-        -system-libtiff \
-        -system-libmng \
+        -qt-libpng \
+        -qt-libjpeg \
+        -qt-libtiff \
+        -qt-libmng \
         -system-sqlite \
-        -openssl-linked \
-        -dbus-linked \
+        -openssl \
+        -dbus \
         -v \
         $($(PKG)_CONFIGURE_OPTS)
 
