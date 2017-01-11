@@ -2,15 +2,15 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.7.0
-$(PKG)_CHECKSUM := 3e7b6d123cab23a587ccbc45173296b33786faa409dba0494e4658fda3ede646
+$(PKG)_VERSION  := 5.7.1
+$(PKG)_CHECKSUM := edcdf549d94d98aff08e201dcb3ca25bc3628a37b1309e320d5f556b6b66557e
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc fontconfig freetds libmysqlclient openssl postgresql sqlite dbus icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.7/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     sort |
