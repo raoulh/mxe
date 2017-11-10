@@ -52,6 +52,7 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
+        -xmlpatterns \
         -qt-sql-sqlite \
         -qt-sql-odbc \
         -qt-sql-psql \

@@ -17,7 +17,7 @@ MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
-PKG_MIRROR         := http://s3.amazonaws.com/mxe-pkg
+PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
 PKG_CDN            := http://d1yihgixbnrglp.cloudfront.net
 GITLAB_BACKUP      := http://gitlab.com/starius/mxe-backup2/raw/master/
 
@@ -52,7 +52,7 @@ TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
-PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
+PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(shell echo $$PATH | $(SED) -e 's,:\.$$,,' -e 's,\.:,,g')
 
 # set to empty or $(false) to disable stripping
 STRIP_TOOLCHAIN := $(true)
@@ -78,6 +78,10 @@ repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
 
 MXE_DISABLE_DOC_OPTS = \
     ac_cv_prog_HAVE_DOXYGEN="false" \
+    --enable-doc=no \
+    --enable-gtk-doc=no \
+    --enable-gtk-doc-html=no \
+    --enable-gtk-doc-pdf=no \
     --{docdir,infodir,mandir,with-html-dir}='$(BUILD_DIR).sink' \
     --disable-doxygen
 
@@ -247,7 +251,7 @@ define PREPARE_PKG_SOURCE
     $(else),\
         cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
         cd '$(2)/$($(1)_SUBDIR)'
-        $(foreach PKG_PATCH,$(PKG_PATCHES),
+        $(foreach PKG_PATCH,$($(1)_PATCHES),
             (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     )
 endef
@@ -267,9 +271,9 @@ ESCAPE_PKG = \
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    ($(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
+    ($(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
@@ -491,6 +495,7 @@ $(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 define PKG_RULE
 # configure GitHub metadata if GH_CONF is set
 $(if $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
+$(eval $(PKG)_PATCHES := $(PKG_PATCHES))
 
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
@@ -554,7 +559,7 @@ define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
-                          $(PKG_PATCHES) \
+                          $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
                           $($(1)_FILE_DEPS) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
