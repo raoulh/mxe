@@ -14,7 +14,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 17da8b97..bddd7096 100644
+index 55c74aad..d7bcffeb 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -224,13 +224,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -109,10 +109,10 @@ Subject: [PATCH] reenable fontconfig for win32 (MXE-specific)
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 2fb03a45..91ae3917 100644
+index 28c8034c..cf9753ba 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -498,7 +498,7 @@
+@@ -905,7 +905,7 @@
          },
          "fontconfig": {
              "label": "Fontconfig",
@@ -146,7 +146,7 @@ Subject: [PATCH] fix treatment of SYBASE_LIBS
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
 diff --git a/src/plugins/sqldrivers/configure.pri b/src/plugins/sqldrivers/configure.pri
-index 9fb95729..d0640809 100644
+index b69b51b6..d37423ad 100644
 --- a/src/plugins/sqldrivers/configure.pri
 +++ b/src/plugins/sqldrivers/configure.pri
 @@ -92,7 +92,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
@@ -160,38 +160,16 @@ index 9fb95729..d0640809 100644
      return(true)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH] use pkg-config for harfbuzz
-
-Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
-
-diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 91ae3917..398d07d0 100644
---- a/src/gui/configure.json
-+++ b/src/gui/configure.json
-@@ -130,7 +130,8 @@
-             "label": "HarfBuzz",
-             "test": "unix/harfbuzz",
-             "sources": [
--                "-lharfbuzz"
-+               { "type": "pkgConfig", "args": "harfbuzz" },
-+               "-lharfbuzz"
-             ]
-         },
-         "imf": {
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Raoul Hecky <r.hecky@emc-partner.ch>
 Date: Thu, 24 Aug 2017 14:32:43 +0200
 Subject: [PATCH] force enable of angle
 
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 398d07d0..2479dc57 100644
+index cf9753ba..164f63e9 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -441,7 +441,7 @@
+@@ -842,7 +842,7 @@
          "angle": {
              "label": "ANGLE",
              "autoDetect": "features.opengles2 || features.opengl-dynamic",
@@ -221,7 +199,7 @@ index 0173311b..a0274219 100644
  
  #include "common/tls.h"
 diff --git a/src/angle/src/common/common.pri b/src/angle/src/common/common.pri
-index 7305362d..825d7820 100644
+index c1fad149..d8afa982 100644
 --- a/src/angle/src/common/common.pri
 +++ b/src/angle/src/common/common.pri
 @@ -24,6 +24,9 @@ QMAKE_PRL_INSTALL_REPLACE += lib_replace
@@ -11354,32 +11332,6 @@ index 00000000..50ba19a5
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Raoul Hecky <r.hecky@emc-partner.ch>
-Date: Thu, 24 Aug 2017 15:28:42 +0200
-Subject: [PATCH] Remove unused duplicated struct definition. it is already
- defined in current mingw64 headers
-
-
-diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-index 972c2894..69d49f14 100644
---- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-+++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
-@@ -20,13 +20,6 @@ typedef struct D3D11_QUERY_DATA_SO_STATISTICS {
- } D3D11_QUERY_DATA_SO_STATISTICS;
- #endif // ANGLE_MINGW32_COMPAT
- 
--#ifdef __MINGW32__
--typedef struct D3D11_QUERY_DATA_TIMESTAMP_DISJOINT {
--  UINT64 Frequency;
--  BOOL   Disjoint;
--} D3D11_QUERY_DATA_TIMESTAMP_DISJOINT;
--#endif // MINGW32
--
- namespace rx
- {
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Raoul Hecky <r.hecky@emc-partner.ch>
 Date: Thu, 24 Aug 2017 16:41:20 +0200
 Subject: [PATCH] Fix cmake libs deps for qttools
 
@@ -11405,7 +11357,7 @@ Subject: [PATCH] fix build of qttools
 
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index bddd7096..4f67b878 100644
+index d7bcffeb..4881b826 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -216,7 +216,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -11425,7 +11377,7 @@ Subject: [PATCH] fix build of qttools
 
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 4f67b878..76ed4601 100644
+index 4881b826..d6eca311 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -220,7 +220,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -11436,4 +11388,91 @@ index 4f67b878..76ed4601 100644
 +        list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"\")
      endif()
  !!ENDIF
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Fri, 10 Nov 2017 16:29:15 +0100
+Subject: [PATCH] use pkg-config for harfbuzz
+
+
+diff --git a/src/gui/configure.json b/src/gui/configure.json
+index 164f63e9..961ccac6 100644
+--- a/src/gui/configure.json
++++ b/src/gui/configure.json
+@@ -218,6 +218,7 @@
+                 ]
+             },
+             "sources": [
++                { "type": "pkgConfig", "args": "harfbuzz" },
+                 "-lharfbuzz"
+             ]
+         },
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 7 Oct 2017 11:39:29 +0200
+Subject: [PATCH] Revert "qmake: don't limit command line length when not
+ actually on windows"
+
+This breaks cross compiling for mingw.
+
+This reverts commit 8bebded9ab02b8eec67c44bfddf802d6bf9cda3c.
+
+diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+index 185afaaa..20a2a6fa 100644
+--- a/mkspecs/win32-g++/qmake.conf
++++ b/mkspecs/win32-g++/qmake.conf
+@@ -50,10 +50,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
+ QMAKE_LFLAGS_WINDOWS    = -Wl,-subsystem,windows
+ QMAKE_LFLAGS_DLL        = -shared
+ QMAKE_LFLAGS_GCSECTIONS = -Wl,--gc-sections
+-equals(QMAKE_HOST.os, Windows) {
+-    QMAKE_LINK_OBJECT_MAX = 10
+-    QMAKE_LINK_OBJECT_SCRIPT = object_script
+-}
++QMAKE_LINK_OBJECT_MAX   = 10
++QMAKE_LINK_OBJECT_SCRIPT = object_script
+ QMAKE_PREFIX_SHLIB      =
+ QMAKE_EXTENSION_SHLIB   = dll
+ QMAKE_PREFIX_STATICLIB  = lib
+diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
+index bad53dc5..c3b87653 100644
+--- a/qmake/generators/win32/mingw_make.cpp
++++ b/qmake/generators/win32/mingw_make.cpp
+@@ -285,8 +285,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
+ 
+ void MingwMakefileGenerator::writeObjectsPart(QTextStream &t)
+ {
+-    const ProString &objmax = project->first("QMAKE_LINK_OBJECT_MAX");
+-    if (objmax.isEmpty() || project->values("OBJECTS").count() < objmax.toInt()) {
++    if (project->values("OBJECTS").count() < var("QMAKE_LINK_OBJECT_MAX").toInt()) {
+         objectsLinkLine = "$(OBJECTS)";
+     } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
+         QString ar_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Fri, 10 Nov 2017 16:43:27 +0100
+Subject: [PATCH] Remove unused duplicated struct definition. it is already 
+ defined in current mingw64 headers
+
+
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
+index 0a79b26d..69d49f14 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Query11.cpp
+@@ -20,13 +20,6 @@ typedef struct D3D11_QUERY_DATA_SO_STATISTICS {
+ } D3D11_QUERY_DATA_SO_STATISTICS;
+ #endif // ANGLE_MINGW32_COMPAT
+ 
+-#ifndef ANGLE_D3D11_QDTD_AVAILABLE
+-typedef struct D3D11_QUERY_DATA_TIMESTAMP_DISJOINT {
+-  UINT64 Frequency;
+-  BOOL   Disjoint;
+-} D3D11_QUERY_DATA_TIMESTAMP_DISJOINT;
+-#endif // MINGW32
+-
+ namespace rx
+ {
  
