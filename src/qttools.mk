@@ -5,11 +5,11 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 2bb996118b68e9939c185a593837e5a41bb3667bf5d4d5134fac02598bd2d81a
+$(PKG)_CHECKSUM := 9d93ca84272cdf9031913cb3a6876716aa8a174e91693839f0de0ea3dd3a67d9
 $(PKG)_SUBDIR    = $(subst qtbase,qttools,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qttools,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qttools,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtactiveqt qtbase qtdeclarative
+$(PKG)_DEPS     := cc qtactiveqt qtbase qtdeclarative
 
 $(PKG)_TEST_DIR := $(dir $(lastword $(MAKEFILE_LIST)))/qttools-test
 

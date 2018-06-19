@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 26ef46be555da21112c01e4b9f5e3abba9194485c8822ab55ba3d6496222a
 $(PKG)_SUBDIR   := libssh-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://red.libssh.org/attachments/download/195/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib openssl
+$(PKG)_DEPS     := cc zlib openssl
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'

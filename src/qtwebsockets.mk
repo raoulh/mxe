@@ -5,11 +5,11 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := afddc1bd915ea47ccbec968a7af02e2a5405c717830e4671924fe35b55e81674
+$(PKG)_CHECKSUM := 7d5845805bec42de121ecc063ee40ac1438975adcec395c6af97cfd5bb3539b7
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebsockets,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebsockets,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebsockets,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
