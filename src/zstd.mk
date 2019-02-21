@@ -4,8 +4,8 @@ PKG             := zstd
 $(PKG)_WEBSITE  := https://github.com/facebook/zstd
 $(PKG)_DESCR    := Zstandard is a fast lossless compression algorithm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.4
-$(PKG)_CHECKSUM := 92e41b6e8dd26bbd46248e8aa1d86f1551bc221a796277ae9362954f26d605a9
+$(PKG)_VERSION  := 1.3.8
+$(PKG)_CHECKSUM := 90d902a1282cc4e197a8023b6d6e8d331c1fd1dfe60f7f8e4ee9da40da886dc3
 $(PKG)_GH_CONF  := facebook/zstd/tags,v
 $(PKG)_DEPS     := cc
 
@@ -18,18 +18,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # create pkg-config files
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: $(PKG)'; \
-     echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: $($(PKG)_DESCR)'; \
-     echo 'Libs: -L$(PREFIX)/$(TARGET)/lib -l$(PKG)'; \
-     echo 'Cflags: -I$(PREFIX)/$(TARGET)/include';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+        `'$(TARGET)-pkg-config' lib$(PKG) --cflags --libs`
 endef

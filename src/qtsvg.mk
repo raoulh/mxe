@@ -5,11 +5,12 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 4318ce3c1f94ca865e3405aefb927f257ca824c5adc482302f1449ed34dbd8b8
+$(PKG)_CHECKSUM := 5bc1f744d32c06f5aa4eff33759568106a995ce21fa1326a247dfa5f783f63c8
 $(PKG)_SUBDIR    = $(subst qtbase,qtsvg,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtsvg,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtsvg,$(qtbase_URL))
 $(PKG)_DEPS     := cc qtbase
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
