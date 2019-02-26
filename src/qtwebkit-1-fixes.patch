@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 11 Jan 2019 18:02:55 +1100
-Subject: [PATCH 1/4] ad hoc fixes
+Subject: [PATCH 01/10] ad hoc fixes
 
 
 diff --git a/Source/JavaScriptCore/jsc.cpp b/Source/JavaScriptCore/jsc.cpp
@@ -183,7 +183,8 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Konstantin Tokarev <annulen@yandex.ru>
 Date: Fri, 3 Nov 2017 18:59:25 +0300
-Subject: [PATCH 2/4] Install private headers for WK2 and private .pri modules
+Subject: [PATCH 02/10] Install private headers for WK2 and private .pri
+ modules
 
 Change-Id: Ie2f52c600180fd31cc5fac2f5d30952df28ea9d6
 
@@ -235,7 +236,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:06:01 +1100
-Subject: [PATCH 3/4] cmake: fix Cflags sections in pkg-config files
+Subject: [PATCH 03/10] cmake: fix Cflags sections in pkg-config files
 
 
 diff --git a/Source/cmake/ECMGeneratePkgConfigFile.cmake b/Source/cmake/ECMGeneratePkgConfigFile.cmake
@@ -254,7 +255,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:07:10 +1100
-Subject: [PATCH 4/4] Fix cross-compilation using MinGW
+Subject: [PATCH 04/10] Fix cross-compilation using MinGW
 
 with USE_MEDIA_FOUNDATION=ON. (Part 1)
 
@@ -294,3 +295,144 @@ index 1111111..2222222 100644
  
  namespace WebCore {
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 21 Feb 2019 11:59:41 +0100
+Subject: [PATCH 05/10] Do not check private headers, the check fails
+
+
+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/OptionsQt.cmake
++++ b/Source/cmake/OptionsQt.cmake
+@@ -609,7 +609,6 @@ endif ()
+ 
+ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS ${QT_REQUIRED_COMPONENTS})
+ 
+-CHECK_QT5_PRIVATE_INCLUDE_DIRS(Gui private/qhexstring_p.h)
+ if (ENABLE_WEBKIT2)
+     CHECK_QT5_PRIVATE_INCLUDE_DIRS(Quick private/qsgrendernode_p.h)
+ endif ()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 21 Feb 2019 14:21:04 +0100
+Subject: [PATCH 06/10] Add missing Qt5Qml in LIBS
+
+
+diff --git a/Source/WebKit2/PlatformQt.cmake b/Source/WebKit2/PlatformQt.cmake
+index 1111111..2222222 100644
+--- a/Source/WebKit2/PlatformQt.cmake
++++ b/Source/WebKit2/PlatformQt.cmake
+@@ -269,6 +269,7 @@ list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+ list(APPEND WebKit2_LIBRARIES
+     ${Qt5Positioning_LIBRARIES}
+     ${Qt5Quick_LIBRARIES}
++    ${Qt5Qml_LIBRARIES}
+     ${Qt5WebChannel_LIBRARIES}
+     ${X11_X11_LIB}
+ )
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 21 Feb 2019 14:55:14 +0100
+Subject: [PATCH 07/10] Add missing Qt5Qml in LIBS
+
+
+diff --git a/Tools/MiniBrowser/qt/CMakeLists.txt b/Tools/MiniBrowser/qt/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Tools/MiniBrowser/qt/CMakeLists.txt
++++ b/Tools/MiniBrowser/qt/CMakeLists.txt
+@@ -51,6 +51,7 @@ set(MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
+ set(MiniBrowser_LIBRARIES
+     WebKit
+     ${Qt5Quick_LIBRARIES}
++    ${Qt5Qml_LIBRARIES}
+ )
+ 
+ if (SHARED_CORE)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 21 Feb 2019 15:43:12 +0100
+Subject: [PATCH 08/10] Add missing Qt5Multimedia in LIBS
+
+
+diff --git a/Source/WebKit2/UIProcess/API/qt/tests/CMakeLists.txt b/Source/WebKit2/UIProcess/API/qt/tests/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Source/WebKit2/UIProcess/API/qt/tests/CMakeLists.txt
++++ b/Source/WebKit2/UIProcess/API/qt/tests/CMakeLists.txt
+@@ -82,6 +82,7 @@ set(qmltests_LIBRARIES
+     ${Qt5Quick_LIBRARIES}
+     ${Qt5QuickTest_LIBRARIES}
+     ${Qt5Test_LIBRARIES}
++    ${Qt5Multimedia_LIBRARIES}
+ )
+ 
+ if (SHARED_CORE)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 21 Feb 2019 17:22:13 +0100
+Subject: [PATCH 09/10] Add missing Qt5Multimedia in LIBS
+
+
+diff --git a/Source/WebKit/qt/declarative/experimental/CMakeLists.txt b/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
++++ b/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_library(qmlwebkitexperimentalplugin MODULE plugin.cpp)
+ target_link_libraries(qmlwebkitexperimentalplugin
+-    WebKit Qt5::Quick)
++    WebKit Qt5::Quick Qt5::Multimedia)
+ 
+ set(qmlwebkitexperimental_output_dir "${CMAKE_BINARY_DIR}/imports/QtWebKit/experimental")
+ set(qmlwebkitexperimental_install_dir "${QML_INSTALL_DIR}/QtWebKit/experimental")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Fri, 22 Feb 2019 09:36:31 +0100
+Subject: [PATCH 10/10] Add missing Qt5 deps in LIBS
+
+
+diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
+index 1111111..2222222 100644
+--- a/Source/WebKit/PlatformQt.cmake
++++ b/Source/WebKit/PlatformQt.cmake
+@@ -655,6 +655,9 @@ if (USE_QT_MULTIMEDIA)
+     list(APPEND WebKitWidgets_SYSTEM_INCLUDE_DIRECTORIES
+         ${Qt5MultimediaWidgets_INCLUDE_DIRS}
+     )
++    list(APPEND WebKitWidgets_LIBRARIES
++        ${Qt5Multimedia_LIBRARIES}
++    )
+ endif ()
+ 
+ WEBKIT_CREATE_FORWARDING_HEADERS(QtWebKitWidgets DIRECTORIES qt/WidgetApi)
+diff --git a/Source/WebKit/qt/declarative/CMakeLists.txt b/Source/WebKit/qt/declarative/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Source/WebKit/qt/declarative/CMakeLists.txt
++++ b/Source/WebKit/qt/declarative/CMakeLists.txt
+@@ -23,7 +23,7 @@ include_directories(SYSTEM
+ 
+ add_library(qmlwebkitplugin MODULE plugin.cpp)
+ target_link_libraries(qmlwebkitplugin
+-    WebKit Qt5::Quick)
++    WebKit Qt5::Quick Qt5::Qml)
+ 
+ set(qmlwebkit_output_dir "${CMAKE_BINARY_DIR}/imports/QtWebKit")
+ set(qmlwebkit_install_dir "${QML_INSTALL_DIR}/QtWebKit")
+diff --git a/Source/WebKit/qt/declarative/experimental/CMakeLists.txt b/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
++++ b/Source/WebKit/qt/declarative/experimental/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_library(qmlwebkitexperimentalplugin MODULE plugin.cpp)
+ target_link_libraries(qmlwebkitexperimentalplugin
+-    WebKit Qt5::Quick Qt5::Multimedia)
++    WebKit Qt5::Quick Qt5::Multimedia Qt5::Qml)
+ 
+ set(qmlwebkitexperimental_output_dir "${CMAKE_BINARY_DIR}/imports/QtWebKit/experimental")
+ set(qmlwebkitexperimental_install_dir "${QML_INSTALL_DIR}/QtWebKit/experimental")

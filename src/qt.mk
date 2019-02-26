@@ -65,7 +65,7 @@ define $(PKG)_BUILD
         -qt-libtiff \
         -qt-libmng \
         -system-sqlite \
-        -openssl \
+        -no-openssl \
         -dbus \
         -v \
         $($(PKG)_CONFIGURE_OPTS)
