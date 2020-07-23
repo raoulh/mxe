@@ -1,18 +1,16 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qt
-$(PKG)_WEBSITE  := https://www.qt.io/
-$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.8.7
 $(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc dbus freetds openssl postgresql sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/4.8/ | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \
     $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
@@ -68,14 +66,13 @@ define $(PKG)_BUILD
         -no-sql-mysql \
         -qt-sql-tds -D Q_USE_SYBASE \
         -system-zlib \
-        -system-libpng \
-        -system-libjpeg \
-        -system-libtiff \
-        -system-libmng \
+        -qt-libpng \
+        -qt-libjpeg \
+        -qt-libtiff \
+        -qt-libmng \
         -system-sqlite \
-        -openssl-linked \
-        -dbus-linked \
-        -no-pch \
+        -no-openssl \
+        -dbus \
         -v \
         $($(PKG)_CONFIGURE_OPTS)
 
@@ -140,7 +137,7 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 
     # setup cmake toolchain
-    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake CACHE FILEPATH "Qt4 qmake executable")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
     # fix static linking errors of QtGui to missing lcms2 and lzma
     # introduced by poor libmng linking
     echo "set(MNG_LIBRARY `$(TARGET)-pkg-config --libs-only-l libmng`)" >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'

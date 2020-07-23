@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         -DWITH_DEBUG_CALLTRACE=OFF \
         -DWITH_DEBUG_CRYPTO=OFF \
         -DWITH_EXAMPLES=OFF \
-        -DWITH_GCRYPT=ON \
+        -DWITH_GCRYPT=OFF \
         -DWITH_GSSAPI=OFF \
         -DWITH_INTERNAL_DOC=OFF \
         -DWITH_NACL=OFF \
