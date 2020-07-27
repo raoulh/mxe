@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 01/12] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -13,9 +13,8 @@ for header-only modules when building Qt5 statically.
 Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
-
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 309798a767..18156cac9e 100644
+index 1111111..2222222 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -370,6 +370,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -28,29 +27,26 @@ index 309798a767..18156cac9e 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -411,9 +414,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
-     add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
+@@ -412,9 +415,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
  !!ENDIF
--!!ELSE
+ !!ELSE
 -!!IF equals(TEMPLATE, aux)
 -    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
- !!ELSE
+-!!ELSE
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
--- 
-2.25.1
+ !!ENDIF
 
-
-From c3fa97702a080eb1a931fd1f41f7a1dd5b775523 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 2/2] use pkg-config for harfbuzz
+Subject: [PATCH 2/5] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 5ebcdb99b5..2553cb5cf6 100644
+index 1111111..2222222 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -303,7 +303,8 @@
@@ -63,14 +59,11 @@ index 5ebcdb99b5..2553cb5cf6 100644
              ]
          },
          "imf": {
--- 
-2.25.1
-
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Raoul Hecky <r.hecky@emc-partner.ch>
 Date: Wed, 20 Feb 2019 16:11:40 +0100
-Subject: [PATCH 06/12] Force enable building ANGLE
+Subject: [PATCH 3/5] Force enable building ANGLE
 
 
 diff --git a/src/angle/src/common/common.pri b/src/angle/src/common/common.pri
@@ -134,60 +127,20 @@ diff --git a/src/gui/configure.json b/src/gui/configure.json
 index 1111111..2222222 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -1105,7 +1105,7 @@
+@@ -1109,7 +1109,7 @@
          "angle": {
              "label": "ANGLE",
              "autoDetect": "features.opengles2 || features.opengl-dynamic",
--            "condition": "features.dxguid && tests.fxc && (features.direct3d9 || (config.winrt && features.direct3d11 && libs.d3dcompiler))",
-+            "condition": "features.dxguid && (features.direct3d9 || (config.winrt && features.direct3d11 && libs.d3dcompiler))",
+-            "condition": "!features.opengl-desktop && features.dxguid && tests.fxc && (features.direct3d9 || (config.winrt && features.direct3d11 && libs.d3dcompiler))",
++            "condition": "!features.opengl-desktop && features.dxguid && (features.direct3d9 || (config.winrt && features.direct3d11 && libs.d3dcompiler))",
              "output": [
                  "publicFeature",
                  { "type": "define", "name": "QT_OPENGL_ES_2_ANGLE" },
 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Raoul Hecky <r.hecky@emc-partner.ch>
-Date: Wed, 20 Feb 2019 16:18:06 +0100
-Subject: [PATCH 10/12] Revert "qmake: don't limit command line length when not
- actually on windows"
-
-
-diff --git a/mkspecs/common/g++-win32.conf b/mkspecs/common/g++-win32.conf
-index 1111111..2222222 100644
---- a/mkspecs/common/g++-win32.conf
-+++ b/mkspecs/common/g++-win32.conf
-@@ -48,10 +48,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
- QMAKE_LFLAGS_WINDOWS    = -Wl,-subsystem,windows
- QMAKE_LFLAGS_DLL        = -shared
- QMAKE_LFLAGS_GCSECTIONS = -Wl,--gc-sections
--equals(QMAKE_HOST.os, Windows) {
--    QMAKE_LINK_OBJECT_MAX = 10
--    QMAKE_LINK_OBJECT_SCRIPT = object_script
--}
-+QMAKE_LINK_OBJECT_MAX = 10
-+QMAKE_LINK_OBJECT_SCRIPT = object_script
- QMAKE_EXT_OBJ           = .o
- QMAKE_EXT_RES           = _res.o
- QMAKE_PREFIX_SHLIB      =
-diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
-index 1111111..2222222 100644
---- a/qmake/generators/win32/mingw_make.cpp
-+++ b/qmake/generators/win32/mingw_make.cpp
-@@ -294,8 +294,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
- 
- void MingwMakefileGenerator::writeObjectsPart(QTextStream &t)
- {
--    const ProString &objmax = project->first("QMAKE_LINK_OBJECT_MAX");
--    if (objmax.isEmpty() || project->values("OBJECTS").count() < objmax.toInt()) {
-+    if (project->values("OBJECTS").count() < var("QMAKE_LINK_OBJECT_MAX").toInt()) {
-         objectsLinkLine = "$(OBJECTS)";
-     } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
-         QString ar_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
-
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Raoul Hecky <r.hecky@emc-partner.ch>
 Date: Wed, 20 Feb 2019 16:29:01 +0100
-Subject: [PATCH 11/12] Add precompiled angle shaders
+Subject: [PATCH 4/5] Add precompiled angle shaders
 
 
 diff --git a/src/angle/src/libGLESv2/libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_gs.h b/src/angle/src/libGLESv2/libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_gs.h
@@ -20089,3 +20042,41 @@ index 00000000..e6ffc4ae
 +    255, 255,   0,   0
 +};
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raoul Hecky <r.hecky@emc-partner.ch>
+Date: Thu, 23 Jul 2020 12:38:41 +0200
+Subject: [PATCH 5/5] Revert "qmake: don't limit command line length when not
+ actually on windows"
+
+
+diff --git a/mkspecs/common/g++-win32.conf b/mkspecs/common/g++-win32.conf
+index 1111111..2222222 100644
+--- a/mkspecs/common/g++-win32.conf
++++ b/mkspecs/common/g++-win32.conf
+@@ -46,10 +46,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
+ QMAKE_LFLAGS_WINDOWS    = -Wl,-subsystem,windows
+ QMAKE_LFLAGS_DLL        = -shared
+ QMAKE_LFLAGS_GCSECTIONS = -Wl,--gc-sections
+-equals(QMAKE_HOST.os, Windows) {
+-    QMAKE_LINK_OBJECT_MAX = 10
+-    QMAKE_LINK_OBJECT_SCRIPT = object_script
+-}
++QMAKE_LINK_OBJECT_MAX = 10
++QMAKE_LINK_OBJECT_SCRIPT = object_script
+ QMAKE_EXT_OBJ           = .o
+ QMAKE_EXT_RES           = _res.o
+ QMAKE_PREFIX_SHLIB      =
+diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
+index 1111111..2222222 100644
+--- a/qmake/generators/win32/mingw_make.cpp
++++ b/qmake/generators/win32/mingw_make.cpp
+@@ -237,8 +237,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
+ 
+ void MingwMakefileGenerator::writeObjectsPart(QTextStream &t)
+ {
+-    const ProString &objmax = project->first("QMAKE_LINK_OBJECT_MAX");
+-    if (objmax.isEmpty() || project->values("OBJECTS").count() < objmax.toInt()) {
++    if (project->values("OBJECTS").count() < var("QMAKE_LINK_OBJECT_MAX").toInt()) {
+         objectsLinkLine = "$(OBJECTS)";
+     } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
+         QString ar_response_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");

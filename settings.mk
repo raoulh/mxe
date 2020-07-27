@@ -27,3 +27,9 @@ MXE_TARGETS := i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix
 
 #enable mingw secure API
 mingw-w64-headers_CONFIGURE_OPTS := --enable-secure-api
+
+# This variable controls which plugins are in use.
+# Build with GCC 8.3 and use the meson-wrapper.
+override MXE_PLUGIN_DIRS := \
+	plugins/gcc10 \
+	$(MXE_PLUGIN_DIRS)
