@@ -13,3 +13,5 @@
 /mxe-*.deb*
 /wheezy
 /jessie
+
+docker/mxe_mingw_qt5
