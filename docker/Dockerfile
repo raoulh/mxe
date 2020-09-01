@@ -13,6 +13,7 @@ RUN apt update && \
     bison \
     bzip2 \
     flex \
+    gcc \
     g++ \
     g++-multilib \
     gettext \
@@ -43,6 +44,7 @@ WORKDIR /mxe
 COPY mxe_mingw_qt5 /mxe
 
 RUN make dbus fontconfig freetds libmysqlclient openssl postgresql sqlite icu4c zstd -j4 JOBS=32
+RUN make jpeg libwebp xz minizip jasper tiff assimp lcms libmng -j4 JOBS=32
 
 RUN cd /mxe && \
     make qt5 -j4 JOBS=32
