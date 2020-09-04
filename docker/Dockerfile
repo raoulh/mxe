@@ -43,11 +43,12 @@ WORKDIR /mxe
 
 COPY mxe_mingw_qt5 /mxe
 
-RUN make dbus fontconfig freetds libmysqlclient openssl postgresql sqlite icu4c zstd -j4 JOBS=32
-RUN make jpeg libwebp xz minizip jasper tiff assimp lcms libmng -j4 JOBS=32
+RUN make dbus fontconfig freetds libmysqlclient openssl postgresql sqlite icu4c zstd -j4 JOBS=20
+RUN make jpeg libwebp xz minizip jasper tiff assimp lcms libmng libxml2 libxslt -j4 JOBS=20
 
-RUN cd /mxe && \
-    make qt5 -j4 JOBS=32
+RUN make qt5 -j4 JOBS=20
+
+RUN make qtwebkit -j4 JOBS=20
 
 #Use multi-stage to not keep builds deps and file into the final image to reduce size
 FROM ubuntu:20.04
