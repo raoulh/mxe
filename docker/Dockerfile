@@ -53,3 +53,9 @@ RUN make qtwebkit -j4 JOBS=20
 #Use multi-stage to not keep builds deps and file into the final image to reduce size
 FROM ubuntu:20.04
 COPY --from=intermediate_builder /mxe/usr /mxe/usr
+
+#Install missing dev tools
+RUN apt update && \
+    apt install -y \
+        make zip unzip wget xz-utils git bzip2 bash curl
+
