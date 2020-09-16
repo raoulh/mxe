@@ -46,6 +46,41 @@ COPY mxe_mingw_qt5 /mxe
 RUN make dbus fontconfig freetds libmysqlclient openssl postgresql sqlite icu4c zstd -j4 JOBS=20
 RUN make jpeg libwebp xz minizip jasper tiff assimp lcms libmng libxml2 libxslt -j4 JOBS=20
 
+RUN make qtbase -j4 JOBS=20
+RUN make qtimageformats -j4 JOBS=20
+RUN make qtsvg -j4 JOBS=20
+RUN make qtxmlpatterns -j4 JOBS=20
+RUN make qtdeclarative -j4 JOBS=20
+RUN make qtgamepad -j4 JOBS=20
+RUN make qt3d -j4 JOBS=20
+RUN make qtactiveqt -j4 JOBS=20
+RUN make qtmultimedia -j4 JOBS=20
+RUN make qtcharts -j4 JOBS=20
+RUN make qtconnectivity -j4 JOBS=20
+RUN make qtdatavis3d -j4 JOBS=20
+RUN make qtgraphicaleffects -j4 JOBS=20
+RUN make qtlocation -j4 JOBS=20
+RUN make qtlottie -j4 JOBS=20
+RUN make qtnetworkauth -j4 JOBS=20
+RUN make qtpurchasing -j4 JOBS=20
+RUN make qtquick3d -j4 JOBS=20
+RUN make qtquickcontrols -j4 JOBS=20
+RUN make qtquickcontrols2 -j4 JOBS=20
+RUN make qtremoteobjects -j4 JOBS=20
+RUN make qtscript -j4 JOBS=20
+RUN make qtscxml -j4 JOBS=20
+RUN make qtsensors -j4 JOBS=20
+RUN make qtserialport -j4 JOBS=20
+RUN make qtserialbus -j4 JOBS=20
+RUN make qtspeech -j4 JOBS=20
+RUN make qttools -j4 JOBS=20
+RUN make qttranslations -j4 JOBS=20
+RUN make qtvirtualkeyboard -j4 JOBS=20
+RUN make qtwebsockets -j4 JOBS=20
+RUN make qtwebchannel -j4 JOBS=20
+RUN make qtwebview -j4 JOBS=20
+RUN make qtwinextras -j4 JOBS=20
+
 RUN make qt5 -j4 JOBS=20
 
 RUN make qtwebkit -j4 JOBS=20
